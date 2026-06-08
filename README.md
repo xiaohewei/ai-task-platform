@@ -1,0 +1,37 @@
+# FastAPI 学习营地
+
+> 广东工业大学 大二下 · 暑期实习备战 · AI Coding 全栈方向
+
+---
+
+## 学习路线
+
+| 天 | 内容 | 文件 |
+|:---:|------|------|
+| Day1 | Hello World + SQLite CRUD | `day1-hello/` |
+| Day2 | 路径参数 / 查询参数 / Pydantic + POST | `day2-params/` |
+| Day3 | FastAPI + SQLite 完整 CRUD API | `day3-crud/` |
+| Day4 | SQLAlchemy ORM | `day4-orm/` |
+
+---
+
+## 运行方式
+
+```bash
+cd day1-hello/
+pip install fastapi uvicorn
+uvicorn fastapi1:app --reload
+# 浏览器打开 http://127.0.0.1:8000
+```
+
+---
+
+## 项目目标
+
+- 掌握 Python 后端 API 开发全流程
+- 能独立写出带数据库的 REST API
+- 最终构建「AI 辅助个人任务管理平台」（FastAPI + SQLAlchemy + Vue3）
+
+---
+
+*2026 暑期实习备战中*
