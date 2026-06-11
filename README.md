@@ -12,6 +12,8 @@
 | Day2 | 路径参数 / 查询参数 / Pydantic + POST | `day2-params/` |
 | Day3 | FastAPI + SQLite 完整 CRUD API | `day3-crud/` |
 | Day4 | SQLAlchemy ORM | `day4-orm/` |
+| Day5 | FastAPI + ORM 集成 | `day5-fastapi-orm/` |
+| Day5-alt | 数据库迁移 + 标准项目结构 | `day5-migration/` |
 
 ---
 
