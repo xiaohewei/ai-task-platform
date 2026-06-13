@@ -14,6 +14,7 @@
 | Day4 | SQLAlchemy ORM | `day4-orm/` |
 | Day5 | FastAPI + ORM 集成 | `day5-fastapi-orm/` |
 | Day5-alt | 数据库迁移 + 标准项目结构 | `day5-migration/` |
+| Day6 | JWT 用户认证（注册/登录/令牌/保护路由） | `day6-auth/` |
 
 ---
 

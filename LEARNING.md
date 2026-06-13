@@ -111,6 +111,9 @@ uvicorn FastAPI.fastapi4:app --reload --port 8002
 Day 1  ████████░░  Hello World + SQLite
 Day 2  ██████░░░░  路径参数 / 查询参数 / POST
 Day 3  ██████░░░░  FastAPI + SQLite 联调 CRUD
+Day 4  ██████░░░░  SQLAlchemy ORM
+Day 5  ██████░░░░  FastAPI + ORM 集成
+Day 6  ██████░░░░  JWT 用户认证
 ```
 
 ---
