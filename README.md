@@ -8,20 +8,20 @@
 
 | 天 | 内容 | 文件 |
 |:---:|------|------|
-| Day1 | Hello World + SQLite CRUD | `day1-hello/` |
-| Day2 | 路径参数 / 查询参数 / Pydantic + POST | `day2-params/` |
-| Day3 | FastAPI + SQLite 完整 CRUD API | `day3-crud/` |
-| Day4 | SQLAlchemy ORM | `day4-orm/` |
-| Day5 | FastAPI + ORM 集成 | `day5-fastapi-orm/` |
-| Day5-alt | 数据库迁移 + 标准项目结构 | `day5-migration/` |
-| Day6 | JWT 用户认证（注册/登录/令牌/保护路由） | `day6-auth/` |
+| Day1 | Hello World + SQLite CRUD | `days/day1-hello/` |
+| Day2 | 路径参数 / 查询参数 / Pydantic + POST | `days/day2-params/` |
+| Day3 | FastAPI + SQLite 完整 CRUD API | `days/day3-crud/` |
+| Day4 | SQLAlchemy ORM | `days/day4-orm/` |
+| Day5 | FastAPI + ORM 集成 | `days/day5-fastapi-orm/` |
+| Day5-alt | 数据库迁移 + 标准项目结构 | `days/day5-migration/` |
+| Day6 | JWT 用户认证（注册/登录/令牌/保护路由） | `days/day6-auth/` |
 
 ---
 
 ## 运行方式
 
 ```bash
-cd day1-hello/
+cd days/day1-hello/
 pip install fastapi uvicorn
 uvicorn fastapi1:app --reload
 # 浏览器打开 http://127.0.0.1:8000
