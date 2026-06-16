@@ -15,6 +15,7 @@
 | Day5 | FastAPI + ORM 集成 | `days/day5-fastapi-orm/` |
 | Day5-alt | 数据库迁移 + 标准项目结构 | `days/day5-migration/` |
 | Day6 | JWT 用户认证（注册/登录/令牌/保护路由） | `days/day6-auth/` |
+| Day7 | 静态文件 / 文件下载 / 子应用挂载 | `days/day7-static-mount/` |
 
 ---
 

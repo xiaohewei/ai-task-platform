@@ -279,6 +279,67 @@ uvicorn main:app --reload --port 8004
 
 ---
 
+---
+
+## Day 7 — 2026-06-14：静态文件 / 文件下载 / 子应用挂载
+
+### 学了什么
+
+| 知识点 | 说明 |
+|--------|------|
+| 静态文件 | `StaticFiles(directory="static")` — 让 FastAPI 直接返回图片、CSS、JS 等文件 |
+| 文件下载 | `FileResponse("路径", filename="给用户看的文件名")` — 触发浏览器下载 |
+| 子应用 | 一个 FastAPI 实例挂在另一个上面，独立开发，最后一行代码拼起来 |
+| `app.mount(前缀, 子应用)` | 挂载的核心语句，第一个参数是会被切掉的前缀 |
+| 前缀裁剪规则 | 请求 `/admin/logs` → 切掉 `/admin` → 剩 `/logs` → 交给子应用匹配 |
+| 多层嵌套 | 子应用上还能再挂孙子应用，前缀层层拼接 |
+
+### 核心概念
+
+```
+app.mount("/admin", admin_app)
+          ↑前缀      ↑子应用
+
+请求 /admin/logs：
+  主应用匹配 /admin → 切掉前缀 → 剩余 /logs → 交给 admin_app
+  admin_app 里有 @get("/logs") → 匹配成功
+```
+
+### 代码文件
+
+- [main.py](days/day7-static-mount/main.py) — 主应用 + admin 子应用 + 孙子应用 + 静态文件 + 下载接口
+- [static/](days/day7-static-mount/static/) — 静态文件目录
+- [files/](days/day7-static-mount/files/) — 下载测试文件
+
+### 运行方式
+
+```bash
+cd days/day7-static-mount/
+uvicorn main:app --reload --port 8005
+# 浏览器打开 http://127.0.0.1:8005/docs
+```
+
+### 可测试的 URL
+
+| URL | 效果 |
+|-----|------|
+| `/` | 首页 |
+| `/hello` | 主应用路由 |
+| `/download` | 浏览器弹出下载文件 |
+| `/admin` | 子应用首页 |
+| `/admin/logs` | 子应用操作日志 |
+| `/admin/sub/deep` | 孙子应用（三层嵌套） |
+| `/admin/docs` | 子应用自己的 Swagger 文档 |
+| `/static/hello.txt` | 读取静态文件 |
+
+### 解决了的疑惑
+
+- [x] 哪个是前缀？—— `mount()` 的第一个参数就是
+- [x] 子应用路由会不会变成 `/son//`？—— 不会，前缀被切掉后自动拼接
+- [x] 主应用本身就有 `/son/` 又挂载了 `/son` 怎么办？—— 精准匹配主应用路由优先，剩下的交给子应用
+
+---
+
 ## 学习进度
 
 ```
@@ -288,6 +349,7 @@ Day 3  ██████░░░░  FastAPI + SQLite 联调 CRUD
 Day 4  ██████░░░░  SQLAlchemy ORM
 Day 5  ██████░░░░  FastAPI + ORM 集成
 Day 6  ██████░░░░  JWT 用户认证
+Day 7  ██████░░░░  静态文件 / 子应用
 ```
 
 ---
