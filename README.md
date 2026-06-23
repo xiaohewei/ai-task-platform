@@ -73,31 +73,6 @@ uvicorn main:app --reload
 | Day23 | 项目功能完善：导出 + 分页优化 | `days/day23-project-polish-2/` |
 | Day24 | 数据库优化：索引 + 查询分析 | `days/day24-db-optimize-1/` |
 | Day25 | 数据库优化：N+1 + 连接池 | `days/day25-db-optimize-2/` |
-| Day26 | 算法突击：数组/字符串 10 题 | `days/day26-algo-sprint-1/` |
-| Day27 | 算法突击：链表/栈/队列 10 题 | `days/day27-algo-sprint-2/` |
-| Day28 | 算法突击：树/哈希表 10 题 | `days/day28-algo-sprint-3/` |
-
-### 第 5 周：简历 + 面试
-
-| 天 | 内容 | 文件 |
-|:--:|------|------|
-| Day29 | 简历打磨：项目亮点 + STAR 法则 | `days/day29-resume/` |
-| Day30 | 简历打磨：技术栈描述 + 量化成果 | `days/day30-resume-2/` |
-| Day31 | 模拟面试：计算机网络八股 | `days/day31-interview-prep-1/` |
-| Day32 | 模拟面试：操作系统八股 | `days/day32-interview-prep-2/` |
-| Day33 | 模拟面试：项目问答 | `days/day33-interview-prep-3/` |
-| Day34 | GitHub 个人主页打造 | `days/day34-github-profile/` |
-| Day35 | 项目 README + 技术博客 | `days/day35-github-readme/` |
-
-### 第 6 周：海投 + 复盘
-
-| 天 | 内容 | 文件 |
-|:--:|------|------|
-| Day36 | 整理目标公司 + 投递 10 家 | `days/day36-apply-1/` |
-| Day37 | 投递 10 家 + 面试反馈复盘 | `days/day37-apply-2/` |
-| Day38 | 投递 10 家 + 查漏补缺 | `days/day38-apply-3/` |
-| Day39 | 薄弱知识点总复习 | `days/day39-review/` |
-| Day40 | 总结复盘 + 未来规划 | `days/day40-final/` |
 
 ---
 
@@ -107,9 +82,8 @@ uvicorn main:app --reload
 后端：  Python · FastAPI · SQLAlchemy · JWT · Pydantic · SQLite
 前端：  HTML5 · CSS3 · JavaScript · Vue3
 工具：  Git · GitHub · Docker · uvicorn · VS Code
-算法：  LeetCode 30+ 题（Python）
 ```
 
 ---
 
-*2026 暑期实习备战中 · 40 天 · 300+ 小时*
+*2026 暑期实习备战中 · 25 天系统学习*
