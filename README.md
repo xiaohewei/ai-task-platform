@@ -1,12 +1,20 @@
-# 学习营地
+# AI Task Platform
 
 > 广东工业大学 大二下 · 暑期实习备战 · AI Coding 全栈方向
 >
-> 完整代码 + 踩坑笔记
+> 25 天从零到全栈，每日一个知识点 + 完整代码 + 踩坑笔记
 
 ---
 
 ## 作品展示
+
+## 在线体验
+
+**地址**：https://radial-mustiness-tarmac.ngrok-free.dev
+
+**API 文档**：https://radial-mustiness-tarmac.ngrok-free.dev/docs
+
+---
 
 ### [AI 辅助任务管理平台](task-manager/)
 
