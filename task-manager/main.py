@@ -1,7 +1,9 @@
 """
 AI 辅助个人任务管理平台 — 后端
 FastAPI + SQLAlchemy + JWT + SQLite
+部署：Render 免费托管，GitHub Push 自动部署
 """
+import os
 from datetime import datetime, timedelta, timezone
 from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.responses import FileResponse
@@ -217,3 +219,9 @@ async def index():
 @app.get("/app")
 async def app_page():
     return FileResponse("static/app.html")
+
+
+if __name__ == "__main__":
+    import uvicorn
+    port = int(os.getenv("PORT", "8000"))
+    uvicorn.run(app, host="0.0.0.0", port=port)
