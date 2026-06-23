@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 任务管理平台</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background:#0d1117; color:#c9d1d9; min-height:100vh; display:flex; align-items:center; justify-content:center; }
+  .hero { text-align:center; max-width:500px; padding:40px; }
+  h1 { font-size:36px; color:#f0f6fc; margin-bottom:12px; }
+  .sub { color:#8b949e; font-size:16px; margin-bottom:8px; }
+  .features { text-align:left; margin:32px 0; display:inline-block; }
+  .features li { margin:8px 0; color:#8b949e; }
+  .features li::marker { color:#58a6ff; }
+  .btn { display:inline-block; background:#238636; color:#fff; padding:12px 32px; border-radius:8px; text-decoration:none; font-size:16px; font-weight:600; transition:background .2s; }
+  .btn:hover { background:#2ea043; }
+  .btn-outline { display:inline-block; background:transparent; color:#58a6ff; padding:12px 32px; border-radius:8px; text-decoration:none; font-size:16px; border:1px solid #30363d; margin-left:12px; transition:background .2s; }
+  .btn-outline:hover { background:#21262d; }
+  .footer { position:fixed; bottom:20px; color:#484f58; font-size:12px; }
+</style>
+</head>
+<body>
+<div class="hero">
+  <h1>AI 辅助任务管理</h1>
+  <p class="sub">FastAPI + SQLAlchemy + JWT + Vue3</p>
+  <p class="sub" style="font-size:14px;margin-top:8px;">全栈个人项目 · 2026 暑期</p>
+
+  <ul class="features">
+    <li>用户注册 / 登录（JWT + bcrypt 加密）</li>
+    <li>任务创建、编辑、删除</li>
+    <li>优先级筛选（高 / 中 / 低）</li>
+    <li>状态流转（待办 → 进行中 → 已完成）</li>
+    <li>RESTful API + SQLite 持久化</li>
+  </ul>
+
+  <div style="margin-top:32px;">
+    <a href="/app" class="btn">进入应用</a>
+    <a href="/docs" class="btn-outline">API 文档</a>
+  </div>
+</div>
+<div class="footer">Built with FastAPI · 何伟 · 2026</div>
+</body>
+</html>

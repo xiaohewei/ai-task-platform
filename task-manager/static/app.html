@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>任务管理 — AI Task Manager</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background:#0d1117; color:#c9d1d9; }
+
+  /* ---- Layout ---- */
+  .container { max-width:800px; margin:0 auto; padding:24px; }
+  .hidden { display:none !important; }
+
+  /* ---- Auth ---- */
+  .auth-box { max-width:360px; margin:80px auto; background:#161b22; border:1px solid #21262d; border-radius:12px; padding:32px; }
+  .auth-box h2 { text-align:center; color:#f0f6fc; margin-bottom:24px; }
+  .auth-box .tabs { display:flex; gap:0; margin-bottom:24px; }
+  .auth-box .tab { flex:1; text-align:center; padding:8px; cursor:pointer; border-bottom:2px solid #21262d; color:#8b949e; font-size:14px; }
+  .auth-box .tab.active { color:#58a6ff; border-bottom-color:#58a6ff; }
+
+  /* ---- Form ---- */
+  .form-group { margin-bottom:16px; }
+  .form-group label { display:block; font-size:13px; color:#8b949e; margin-bottom:4px; }
+  .form-group input, .form-group select, .form-group textarea { width:100%; padding:8px 12px; background:#0d1117; border:1px solid #30363d; border-radius:6px; color:#c9d1d9; font-size:14px; outline:none; }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color:#58a6ff; }
+  .form-group textarea { resize:vertical; min-height:60px; }
+
+  .btn { padding:8px 20px; border-radius:6px; font-size:14px; font-weight:600; cursor:pointer; border:none; transition:background .2s; }
+  .btn-primary { background:#238636; color:#fff; width:100%; padding:10px; }
+  .btn-primary:hover { background:#2ea043; }
+  .btn-danger { background:#da3633; color:#fff; }
+  .btn-danger:hover { background:#f85149; }
+  .btn-sm { padding:4px 12px; font-size:12px; }
+  .btn-outline { background:transparent; border:1px solid #30363d; color:#c9d1d9; }
+  .btn-outline:hover { background:#21262d; }
+  .btn-icon { background:transparent; border:none; color:#8b949e; cursor:pointer; font-size:16px; padding:4px 8px; }
+  .btn-icon:hover { color:#f0f6fc; }
+
+  /* ---- Header ---- */
+  .header { background:#161b22; border-bottom:1px solid #21262d; padding:12px 24px; display:flex; align-items:center; justify-content:space-between; }
+  .header h1 { font-size:18px; color:#f0f6fc; }
+  .header .user-info { display:flex; align-items:center; gap:12px; font-size:14px; }
+
+  /* ---- Toolbar ---- */
+  .toolbar { display:flex; gap:12px; margin:20px 0; flex-wrap:wrap; align-items:center; }
+  .toolbar select { padding:6px 12px; background:#161b22; border:1px solid #30363d; border-radius:6px; color:#c9d1d9; font-size:13px; }
+  .toolbar .spacer { flex:1; }
+
+  /* ---- Task Cards ---- */
+  .task-list { display:flex; flex-direction:column; gap:12px; }
+  .task-card { background:#161b22; border:1px solid #21262d; border-radius:8px; padding:16px; display:flex; gap:16px; align-items:flex-start; transition:border-color .2s; }
+  .task-card:hover { border-color:#30363d; }
+  .task-left { flex:1; }
+  .task-title { font-size:15px; color:#f0f6fc; font-weight:600; margin-bottom:4px; }
+  .task-desc { font-size:13px; color:#8b949e; margin-bottom:8px; }
+  .task-meta { font-size:12px; color:#484f58; display:flex; gap:16px; }
+  .task-right { display:flex; gap:8px; align-items:center; }
+  .badge { display:inline-block; padding:2px 8px; border-radius:12px; font-size:11px; font-weight:600; }
+  .badge-high { background:#da363322; color:#f85149; }
+  .badge-mid { background:#d2992222; color:#d29922; }
+  .badge-low { background:#23863622; color:#3fb950; }
+  .badge-todo { background:#8b949e22; color:#8b949e; }
+  .badge-progress { background:#58a6ff22; color:#58a6ff; }
+  .badge-done { background:#3fb95022; color:#3fb950; }
+
+  /* ---- Modal ---- */
+  .modal-overlay { position:fixed; inset:0; background:#0d1117cc; display:flex; align-items:center; justify-content:center; z-index:100; }
+  .modal { background:#161b22; border:1px solid #30363d; border-radius:12px; padding:24px; width:100%; max-width:480px; }
+  .modal h3 { color:#f0f6fc; margin-bottom:16px; }
+  .modal-actions { display:flex; gap:8px; justify-content:flex-end; margin-top:20px; }
+
+  .empty { text-align:center; padding:60px 0; color:#484f58; }
+  .empty p { font-size:15px; margin-bottom:16px; }
+  .error-msg { color:#f85149; font-size:13px; margin-top:8px; }
+</style>
+</head>
+<body>
+
+<!-- ==================== 登录/注册 ==================== -->
+<div id="authPage" class="auth-box">
+  <h2>AI 任务管理</h2>
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('login')">登录</div>
+    <div class="tab" onclick="switchTab('register')">注册</div>
+  </div>
+
+  <form id="loginForm" onsubmit="handleLogin(event)">
+    <div class="form-group"><input type="text" id="loginUser" placeholder="用户名" required></div>
+    <div class="form-group"><input type="password" id="loginPass" placeholder="密码" required></div>
+    <div id="loginError" class="error-msg hidden"></div>
+    <button class="btn btn-primary" type="submit">登录</button>
+  </form>
+
+  <form id="registerForm" class="hidden" onsubmit="handleRegister(event)">
+    <div class="form-group"><input type="text" id="regUser" placeholder="用户名" required></div>
+    <div class="form-group"><input type="password" id="regPass" placeholder="密码" required></div>
+    <div id="regError" class="error-msg hidden"></div>
+    <button class="btn btn-primary" type="submit">注册</button>
+  </form>
+</div>
+
+<!-- ==================== 主界面 ==================== -->
+<div id="mainPage" class="hidden">
+  <div class="header">
+    <h1>我的任务</h1>
+    <div class="user-info">
+      <span id="displayName"></span>
+      <button class="btn btn-outline btn-sm" onclick="logout()">退出</button>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="toolbar">
+      <select id="statusFilter" onchange="loadTasks()">
+        <option value="">全部状态</option>
+        <option value="待办">待办</option>
+        <option value="进行中">进行中</option>
+        <option value="已完成">已完成</option>
+      </select>
+      <select id="priorityFilter" onchange="loadTasks()">
+        <option value="">全部优先级</option>
+        <option value="高">高优先级</option>
+        <option value="中">中优先级</option>
+        <option value="低">低优先级</option>
+      </select>
+      <span class="spacer"></span>
+      <button class="btn btn-primary" onclick="openCreateModal()">+ 新建任务</button>
+    </div>
+
+    <div id="taskList" class="task-list"></div>
+    <div id="emptyState" class="empty hidden">
+      <p>还没有任务</p>
+      <button class="btn btn-outline" onclick="openCreateModal()">创建第一个任务</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 新建/编辑弹窗 ==================== -->
+<div id="taskModal" class="modal-overlay hidden">
+  <div class="modal">
+    <h3 id="modalTitle">新建任务</h3>
+    <form onsubmit="saveTask(event)">
+      <input type="hidden" id="editTaskId">
+      <div class="form-group"><label>标题</label><input type="text" id="taskTitle" required></div>
+      <div class="form-group"><label>描述</label><textarea id="taskDesc"></textarea></div>
+      <div class="form-group"><label>优先级</label><select id="taskPriority"><option>高</option><option selected>中</option><option>低</option></select></div>
+      <div class="form-group" id="statusGroup" style="display:none;"><label>状态</label><select id="taskStatus"><option>待办</option><option>进行中</option><option>已完成</option></select></div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-outline" onclick="closeModal()">取消</button>
+        <button type="submit" class="btn btn-primary">保存</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ==================== JS ==================== -->
+<script>
+const API = '';
+let token = localStorage.getItem('token') || '';
+let username = localStorage.getItem('username') || '';
+
+function api(path, options = {}) {
+  const headers = options.headers || {};
+  if (token) headers['Authorization'] = 'Bearer ' + token;
+  if (!(options.body instanceof FormData)) headers['Content-Type'] = 'application/json';
+  return fetch(API + path, { ...options, headers }).then(r => {
+    if (r.status === 401) { logout(); throw new Error('未授权'); }
+    return r.json().then(data => { if (!r.ok) throw new Error(data.detail || '请求失败'); return data; });
+  });
+}
+
+// ---- Auth ----
+function switchTab(tab) {
+  document.querySelectorAll('.auth-box .tab').forEach((t,i) => {
+    t.classList.toggle('active', (tab==='login' && i===0) || (tab==='register' && i===1));
+  });
+  document.getElementById('loginForm').classList.toggle('hidden', tab !== 'login');
+  document.getElementById('registerForm').classList.toggle('hidden', tab !== 'register');
+}
+
+async function handleLogin(e) {
+  e.preventDefault();
+  document.getElementById('loginError').classList.add('hidden');
+  try {
+    const data = await api('/api/login', {
+      method:'POST',
+      body: JSON.stringify({username: document.getElementById('loginUser').value, password: document.getElementById('loginPass').value})
+    });
+    token = data.access_token;
+    username = data.username;
+    localStorage.setItem('token', token);
+    localStorage.setItem('username', username);
+    showMain();
+  } catch(err) {
+    document.getElementById('loginError').textContent = err.message;
+    document.getElementById('loginError').classList.remove('hidden');
+  }
+}
+
+async function handleRegister(e) {
+  e.preventDefault();
+  document.getElementById('regError').classList.add('hidden');
+  try {
+    await api('/api/register', {
+      method:'POST',
+      body: JSON.stringify({username: document.getElementById('regUser').value, password: document.getElementById('regPass').value})
+    });
+    document.getElementById('loginUser').value = document.getElementById('regUser').value;
+    document.getElementById('loginPass').value = document.getElementById('regPass').value;
+    switchTab('login');
+    alert('注册成功，请登录');
+  } catch(err) {
+    document.getElementById('regError').textContent = err.message;
+    document.getElementById('regError').classList.remove('hidden');
+  }
+}
+
+function logout() {
+  token = ''; username = '';
+  localStorage.removeItem('token'); localStorage.removeItem('username');
+  document.getElementById('authPage').classList.remove('hidden');
+  document.getElementById('mainPage').classList.add('hidden');
+}
+
+function showMain() {
+  document.getElementById('authPage').classList.add('hidden');
+  document.getElementById('mainPage').classList.remove('hidden');
+  document.getElementById('displayName').textContent = username;
+  loadTasks();
+}
+
+// ---- Tasks ----
+async function loadTasks() {
+  const status = document.getElementById('statusFilter').value;
+  const priority = document.getElementById('priorityFilter').value;
+  const params = new URLSearchParams();
+  if (status) params.set('status_filter', status);
+  if (priority) params.set('priority_filter', priority);
+
+  const tasks = await api('/api/tasks?' + params);
+  const container = document.getElementById('taskList');
+  const empty = document.getElementById('emptyState');
+
+  if (tasks.length === 0) {
+    container.innerHTML = '';
+    empty.classList.remove('hidden');
+    return;
+  }
+  empty.classList.add('hidden');
+
+  const priorityClass = { '高':'badge-high', '中':'badge-mid', '低':'badge-low' };
+  const statusClass = { '待办':'badge-todo', '进行中':'badge-progress', '已完成':'badge-done' };
+
+  container.innerHTML = tasks.map(t => `
+    <div class="task-card">
+      <div class="task-left">
+        <div class="task-title">${esc(t.title)}</div>
+        ${t.description ? `<div class="task-desc">${esc(t.description)}</div>` : ''}
+        <div class="task-meta">
+          <span class="badge ${priorityClass[t.priority] || ''}">${t.priority}</span>
+          <span class="badge ${statusClass[t.status] || ''}">${t.status}</span>
+          <span>${t.created_at}</span>
+        </div>
+      </div>
+      <div class="task-right">
+        <button class="btn btn-outline btn-sm" onclick="openEditModal(${t.id},'${esc(t.title)}','${esc(t.description||'')}','${t.priority}','${t.status}')">编辑</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteTask(${t.id})">删除</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function esc(s) { return s.replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function openCreateModal() {
+  document.getElementById('modalTitle').textContent = '新建任务';
+  document.getElementById('editTaskId').value = '';
+  document.getElementById('taskTitle').value = '';
+  document.getElementById('taskDesc').value = '';
+  document.getElementById('taskPriority').value = '中';
+  document.getElementById('statusGroup').style.display = 'none';
+  document.getElementById('taskModal').classList.remove('hidden');
+}
+
+function openEditModal(id, title, desc, priority, status) {
+  document.getElementById('modalTitle').textContent = '编辑任务';
+  document.getElementById('editTaskId').value = id;
+  document.getElementById('taskTitle').value = title;
+  document.getElementById('taskDesc').value = desc;
+  document.getElementById('taskPriority').value = priority;
+  document.getElementById('taskStatus').value = status;
+  document.getElementById('statusGroup').style.display = 'block';
+  document.getElementById('taskModal').classList.remove('hidden');
+}
+
+function closeModal() { document.getElementById('taskModal').classList.add('hidden'); }
+
+async function saveTask(e) {
+  e.preventDefault();
+  const id = document.getElementById('editTaskId').value;
+  const body = {
+    title: document.getElementById('taskTitle').value,
+    description: document.getElementById('taskDesc').value,
+    priority: document.getElementById('taskPriority').value,
+  };
+  if (id) body.status = document.getElementById('taskStatus').value;
+
+  if (id) {
+    await api('/api/tasks/' + id, { method:'PUT', body:JSON.stringify(body) });
+  } else {
+    await api('/api/tasks', { method:'POST', body:JSON.stringify(body) });
+  }
+  closeModal();
+  loadTasks();
+}
+
+async function deleteTask(id) {
+  if (!confirm('确定删除这个任务？')) return;
+  await api('/api/tasks/' + id, { method:'DELETE' });
+  loadTasks();
+}
+
+// ---- Init ----
+document.getElementById('taskModal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+if (token) showMain();
+</script>
+</body>
+</html>
